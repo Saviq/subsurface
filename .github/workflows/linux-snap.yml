@@ -47,7 +47,7 @@ jobs:
         path: ~/.ccache/**
 
     - name: Build and verify the snap
-      uses: canonical/actions/build-snap@release
+      uses: canonical/actions/build-snap@add-outputs
       id: build-snap
       with:
         setup-lxd: false
