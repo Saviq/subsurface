@@ -27,6 +27,7 @@ jobs:
       id: setup-ccache
       run: |
         sudo apt-get install ccache
+        mkdir -p ${HOME}/.ccache/
         ccache --max-size=2G
         /snap/bin/lxc profile device add default ccache disk source=${HOME}/.ccache/ path=/root/.ccache
 
@@ -35,10 +36,10 @@ jobs:
 
         # Find common base between master and HEAD to use as cache key.
         git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules origin master
-        echo "::set-output name=key::$( git merge-base origin/master ${{ github.sha }} )"
+        echo "key=$( git merge-base origin/master ${{ github.sha }} )" >> $GITHUB_OUTPUT
 
     - name: CCache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         key: ccache-${{ runner.os }}-${{ steps.setup-ccache.outputs.key }}
         restore-keys: |
